@@ -1,0 +1,51 @@
+Table Quarto {
+  quarto_id int [pk, increment]
+  numero int
+  localizacao varchar
+  banheiro_privativo boolean
+  capacidade int
+}
+
+Table Vaga {
+  vaga_id int [pk, increment]
+  quarto_id int [ref: > Quarto.quarto_id]
+  tipo varchar
+  posicao varchar
+  exposicao_sol varchar
+}
+
+Table Hospede {
+  hospede_id int [pk, increment]
+  nome varchar
+  documento varchar [unique]
+  email varchar
+  telefone varchar
+}
+
+Table Reserva {
+  reserva_id int [pk, increment]
+  hospede_id int [ref: > Hospede.hospede_id]
+  data_checkin date
+  data_checkout date
+  status varchar
+  tipo_reserva varchar
+}
+
+Table ReservaVaga {
+  reserva_id int [not null]
+  vaga_id int [not null]
+  primary key (reserva_id, vaga_id)
+}
+
+Ref: ReservaVaga.reserva_id > Reserva.reserva_id
+Ref: ReservaVaga.vaga_id > Vaga.vaga_id
+
+Table Pagamento {
+  pagamento_id int [pk, increment]
+  reserva_id int [ref: > Reserva.reserva_id]
+  valor decimal
+  data_pagamento date
+  metodo_pagamento varchar
+  cartao_id varchar
+  status_pagamento varchar
+}
